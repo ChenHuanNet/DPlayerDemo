@@ -1,0 +1,72 @@
+﻿
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Video</title>
+    @*这个是flv格式用的*@
+    <script src="https://cdn.jsdelivr.net/npm/flv.js/dist/flv.min.js"></script>
+    @*这个是m3u8,bilibi用的*@
+    <script src="https://cdn.jsdelivr.net/npm/hls.js/dist/hls.min.js"></script>
+
+    @*<script src="https://cdn.jsdelivr.net/npm/dashjs/dist/dash.all.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>*@
+
+
+    <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+</head>
+<body>
+    <div id="player1" class="dplayer"></div>
+    <div><input type="button" value="发送实时弹幕" onclick="send()" /></div>
+    <script>
+        var dankamuUrl = "https://localhost:44354/api/Danmaku/GetListByVideoId/"
+        var dp = new DPlayer({
+            element: document.getElementById('player1'),                       // 可选，player元素
+            autoplay: false,                                                   // 可选，自动播放视频，不支持移动浏览器
+            theme: '#FADFA3',                                                  // 可选，主题颜色，默认: #b7daff
+            loop: false,                                                        // 可选，循环播放音乐，默认：true
+            lang: 'zh',                                                        // 可选，语言，`zh'用于中文，`en'用于英语，默认：Navigator  language
+            screenshot: false,                                                  // 可选，启用截图功能，默认值：false，注意：如果设置为true，视频和视频截图必须启用跨域
+            hotkey: true,                                                      // 可选，绑定热键，包括左右键和空格，默认值：true
+            preload: 'auto',                                                   // 可选，预加载的方式可以是'none''metadata''auto'，默认值：'auto'
+            video: {                                                           // 必需，视频信息
+                url: 'https://tianxian.piaohua-kuyun.com/20191006/5760_b38b3a85/index.m3u8',                                         // 必填，视频网址
+                // pic: '若能绽放光芒.png'                                          // 可选，视频截图
+            },
+            danmaku: {                                                         // 可选，显示弹幕，忽略此选项以隐藏弹幕
+                id: '1',                                        // 必需，弹幕 id，注意：它必须是唯一的，不能在你的新播放器 中使用这些： `https://api.prprpr.me/dplayer/list`
+                api: dankamuUrl,                         // 必需，弹幕 api
+                token: 'tokendemo',                                            // 可选，api 的弹幕令牌
+                maximum: 1000,                                                 // 可选，最大数量的弹幕
+                //addition: ['https://api.prprpr.me/dplayer/bilibili?aid=4157142']   // 可选的，额外的弹幕，参见：`Bilibili弹幕支持`
+            }
+        });
+        //事件绑定
+        //dp.on（event, handler）事件：
+
+        //play: DPlayer 开始播放时触发
+        //pause: DPlayer 暂停时触发
+        //canplay: 在有足够的数据可以播放时触发
+        //playing: DPlayer 播放时定期触发
+        //ended: DPlayer 结束时触发 error: 发生错误时触发
+        //HLS支持（实时视频，M3U8格式）
+        //它需要 hls.js 库，并且应该在 DPlayer.min.js 之前加载。实时弹幕尚不支持。
+    </script>
+    <script>
+        function send() {
+            dp.danmaku.draw({
+                text: '哇哈哈哈',
+                color: '#fff',
+                type: 'top',
+            });
+        }
+    </script>
+</body>
+</html>
+
