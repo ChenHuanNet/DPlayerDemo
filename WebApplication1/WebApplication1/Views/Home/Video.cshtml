@@ -24,7 +24,7 @@
 <body>
     <div id="player1" class="dplayer"></div>
     <div><input type="button" value="发送实时弹幕" onclick="send()" /></div>
-    <script>
+    @*<script>
         var dankamuUrl = "https://localhost:44354/api/Danmaku/GetListByVideoId/"
         var dp = new DPlayer({
             element: document.getElementById('player1'),                       // 可选，player元素
@@ -57,7 +57,7 @@
         //ended: DPlayer 结束时触发 error: 发生错误时触发
         //HLS支持（实时视频，M3U8格式）
         //它需要 hls.js 库，并且应该在 DPlayer.min.js 之前加载。实时弹幕尚不支持。
-    </script>
+    </script>*@
     <script>
         function send() {
             dp.danmaku.draw({
@@ -66,6 +66,31 @@
                 type: 'top',
             });
         }
+    </script>
+    <script>
+        //var src =
+        //    'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8' //放置你要直播的地址
+
+        var src ="https://localhost:44354/api/WebSocketT/mu38"
+        const dp = new DPlayer({
+            container: document.getElementById('player1'),
+            live: true,
+            // danmaku: true,
+            apiBackend: {
+                read: function (endpoint, callback) {
+                    console.log('Pretend to connect WebSocket');
+                    // callback();
+                },
+                send: function (endpoint, danmakuData, callback) {
+                    console.log('Pretend to send danamku via WebSocket', danmakuData);
+                    // callback();
+                },
+            },
+            video: {
+                url: `${src}`,
+                type: 'hls',
+            },
+        });
     </script>
 </body>
 </html>

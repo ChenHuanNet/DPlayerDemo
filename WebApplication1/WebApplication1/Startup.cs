@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace WebApplication1
@@ -69,6 +72,15 @@ namespace WebApplication1
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            string path = AppContext.BaseDirectory;
+            path = Path.Combine(path, "Files");
+            //通过url访问文件
+            app.UseStaticFiles(new StaticFileOptions()//自定义自己的文件路径
+            {
+                RequestPath = new PathString("/api/WebSocketT"),//对外的访问路径
+                FileProvider = new PhysicalFileProvider(path)//指定实际物理路径
             });
         }
     }
