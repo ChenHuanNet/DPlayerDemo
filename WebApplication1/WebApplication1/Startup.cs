@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using WebApplication1.Middle;
 
 namespace WebApplication1
 {
@@ -82,6 +84,13 @@ namespace WebApplication1
                 RequestPath = new PathString("/api/WebSocketT"),//对外的访问路径
                 FileProvider = new PhysicalFileProvider(path)//指定实际物理路径
             });
+
+            app.UseWebSockets(new WebSocketOptions
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(60),
+                ReceiveBufferSize = 1024 * 1024
+            });
+            app.UseMiddleware<MyWebSocketMiddleware>();
         }
     }
 }
